@@ -149,7 +149,27 @@ function afficherNiveau(valeur){
 }
 
 // Valeur de démonstration : la connexion Datacake sera ajoutée ensuite.
-afficherNiveau(1000);
+const API_URL = "https://bassin-datacake-api.pegrenier.workers.dev/";
+
+async function actualiserNiveau() {
+  try {
+    const reponse = await fetch(API_URL, { cache: "no-store" });
+
+    if (!reponse.ok) {
+      throw new Error("Erreur HTTP " + reponse.status);
+    }
+
+    const donnees = await reponse.json();
+    afficherNiveau(Number(donnees.litres));
+  } catch (erreur) {
+    console.error("Erreur de lecture du bassin :", erreur);
+    document.getElementById("updated").textContent =
+      "Connexion temporairement indisponible";
+  }
+}
+
+actualiserNiveau();
+setInterval(actualiserNiveau, 5 * 60 * 1000);
 </script>
 </body>
 </html>
