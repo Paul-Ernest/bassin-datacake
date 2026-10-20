@@ -84,6 +84,36 @@ footer{text-align:center;color:#8095ad;font-size:12px;margin-top:20px}
  .tank{height:350px}.tank-wrap{padding:5px}
  .card{padding:17px}.value{font-size:32px}
 }
+ 
+/* Petit poisson animé */
+.poisson {
+  position: absolute;
+  z-index: 2;
+  top: 45%;
+  left: 20%;
+  font-size: 38px;
+  animation: nage 12s linear infinite alternate;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 3px #0018);
+}
+
+@keyframes nage {
+  0% {
+    left: 15%;
+    transform: scaleX(1);
+  }
+  48% {
+    transform: scaleX(1);
+  }
+  50% {
+    transform: scaleX(-1);
+  }
+  100% {
+    left: 75%;
+    transform: scaleX(-1);
+  }
+}
+
 </style>
 </head>
 <body>
@@ -99,6 +129,7 @@ footer{text-align:center;color:#8095ad;font-size:12px;margin-top:20px}
 <section class="layout">
  <div class="tank-wrap">
   <div class="tank">
+   <div class="poisson">🐠</div>
    <div class="water" id="water">
     <div class="wave"></div>
     <div class="wave two"></div>
