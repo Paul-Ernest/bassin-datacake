@@ -1,489 +1,296 @@
-```html
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#111d29">
 <title>Reservoir H2O</title>
 
 <style>
-* {
-  box-sizing: border-box;
+*{box-sizing:border-box}
+
+body{
+ margin:0;
+ background:#0b1422;
+ color:#f3f7ff;
+ font-family:Arial,sans-serif;
+ padding:24px
 }
 
-:root {
-  --fond: #101b27;
-  --carte: #172635;
-  --texte: #f2f8ff;
-  --secondaire: #a8bdcf;
-  --eau: #38c7f6;
-  --bleu: #159bd4;
+main{max-width:1100px;margin:auto}
+
+header{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:12px;
+ border-bottom:1px solid #25354a;
+ padding-bottom:20px;
+ flex-wrap:wrap
 }
 
-body {
-  margin: 0;
-  padding: 24px;
-  background:
-    radial-gradient(ellipse at 50% 0%, #263e50 0%, transparent 58%),
-    linear-gradient(145deg, #111e2b, #09121d);
-  color: var(--texte);
-  font-family: Arial, sans-serif;
-  min-height: 100vh;
+h1{font-size:clamp(28px,4vw,44px);margin:0}
+.sub{color:#aebfd5;margin-top:7px}
+.status{color:#58d99b;font-size:14px}
+
+.layout{
+ display:grid;
+ grid-template-columns:1.4fr 1fr;
+ gap:24px;
+ margin-top:25px;
+ align-items:center
 }
 
-main {
-  max-width: 1100px;
-  margin: auto;
+.tank-wrap{padding:10px;min-width:0}
+
+.tank{
+ height:440px;
+ max-width:480px;
+ margin:auto;
+ position:relative;
+ border:7px solid #aab9c7;
+ border-radius:16px 16px 20px 20px;
+ background:linear-gradient(90deg,#637c91,#d2e0e9 12%,
+ #8199aa 25%,#4c6479 80%,#c1d0dc);
+ box-shadow:inset 0 0 20px #07101c,0 12px 35px #0008;
+ overflow:hidden
 }
 
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  border-bottom: 1px solid #35495b;
-  padding-bottom: 20px;
-  flex-wrap: wrap;
+.tank:before{
+ content:"";
+ position:absolute;
+ z-index:8;
+ top:0;
+ left:-5px;
+ right:-5px;
+ height:18px;
+ border:5px solid #c9d6e0;
+ border-radius:8px;
+ background:linear-gradient(#d9e4ec,#566b7d)
 }
 
-h1 {
-  font-size: clamp(28px, 4vw, 44px);
-  margin: 0;
-  letter-spacing: -1px;
+.tank:after{
+ content:"";
+ position:absolute;
+ z-index:7;
+ inset:0;
+ border-left:12px solid #d4e1ea66;
+ border-right:12px solid #34495b99;
+ pointer-events:none
 }
 
-.sub {
-  color: var(--secondaire);
-  margin-top: 8px;
+.water{
+ position:absolute;
+ z-index:1;
+ left:0;
+ right:0;
+ bottom:0;
+ height:44.5%;
+ background:linear-gradient(90deg,#0073a9,#08a9e7 45%,#006ba8);
+ transition:height 1.4s ease;
+ box-shadow:inset 0 9px 18px #7be2ff55
 }
 
-.status {
-  color: #65e3a4;
-  font-size: 14px;
+.wave{
+ position:absolute;
+ top:-8px;
+ left:-50%;
+ width:200%;
+ height:18px;
+ border-radius:45%;
+ background:#46d2ff99;
+ animation:wave 5s linear infinite
 }
 
-/* ===== CUVE DE FERME EN PLASTIQUE GRIS ===== */
+.wave.two{top:-3px;opacity:.5;animation-duration:7s}
 
-.tank-wrap {
-  padding: 12px;
-  min-width: 0;
-  filter: drop-shadow(0 18px 18px #0005);
+@keyframes wave{
+ to{transform:translateX(25%)}
 }
 
-.tank {
-  height: 440px;
-  max-width: 480px;
-  margin: auto;
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-
-  border: 9px solid #7d8990;
-  border-radius: 17px 17px 22px 22px;
-
-  background:
-    repeating-linear-gradient(
-      90deg,
-      transparent 0px,
-      #ffffff0a 7px,
-      #111b2420 13px,
-      transparent 22px
-    ),
-    linear-gradient(
-      90deg,
-      #66737b 0%,
-      #aab4b9 5%,
-      #c2c9cc 12%,
-      #9da8ad 25%,
-      #7d8a91 50%,
-      #9ba6ab 76%,
-      #c0c8cb 91%,
-      #69777f 100%
-    );
-
-  box-shadow:
-    inset 0 0 0 3px #e2e8eb80,
-    inset 0 0 0 8px #3e4b5366,
-    inset 12px 0 18px #f3f8fa25,
-    inset -14px 0 20px #18252e55,
-    0 5px 0 #49565d,
-    0 12px 28px #0007;
+/* Petit poisson orange */
+.poisson{
+ position:absolute;
+ z-index:4;
+ left:12%;
+ top:42%;
+ width:66px;
+ height:38px;
+ pointer-events:none;
+ filter:drop-shadow(0 3px 5px #0018);
+ animation:nagePoisson 12s ease-in-out infinite alternate
 }
 
-/* Rebords moulés de la cuve */
-
-.tank:before {
-  content: "";
-  position: absolute;
-  z-index: 8;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  height: 25px;
-  border: 5px solid #d0d7da;
-  border-bottom: 4px solid #626f76;
-  border-radius: 9px 9px 5px 5px;
-  background: linear-gradient(
-    180deg,
-    #eef1f2 0%,
-    #b9c2c6 40%,
-    #78868d 78%,
-    #58656c 100%
-  );
-  box-shadow:
-    0 3px 5px #0005,
-    inset 0 2px 2px #fff;
-  pointer-events: none;
+.poisson-corps{
+ position:absolute;
+ inset:5px 12px 5px 4px;
+ border-radius:55% 48% 48% 55%;
+ background:linear-gradient(
+   180deg,#ffd078 0%,#ff922e 45%,#e95b16 100%
+ );
+ box-shadow:inset 0 3px 3px #fff8
 }
 
-/* Reflets et épaisseur du plastique */
-
-.tank:after {
-  content: "";
-  position: absolute;
-  z-index: 5;
-  inset: 0;
-  border-left: 8px solid #eef5f53d;
-  border-right: 9px solid #24343d55;
-  box-shadow: inset 0 0 12px #17242b40;
-  pointer-events: none;
+.poisson-queue{
+ position:absolute;
+ right:0;
+ top:8px;
+ width:0;
+ height:0;
+ border-top:11px solid transparent;
+ border-bottom:11px solid transparent;
+ border-right:17px solid #ff922e;
+ filter:drop-shadow(0 1px 1px #8a390c);
+ transform-origin:right center;
+ animation:remueQueue .35s ease-in-out infinite alternate
 }
 
-/* ===== EAU BLEU CLAIR ET PROPRE ===== */
+.poisson-oeil{
+ position:absolute;
+ z-index:3;
+ top:11px;
+ left:12px;
+ width:7px;
+ height:7px;
+ border-radius:50%;
+ background:#182538;
+ border:1px solid white;
+ box-shadow:0 0 2px #fff
 
-.water {
-  position: absolute;
-  z-index: 1;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 44.5%;
-
-  overflow: hidden;
-
-  background:
-    linear-gradient(
-      90deg,
-      #168ec1 0%,
-      #45d2f8 18%,
-      #78e1fa 36%,
-      #39c5ed 55%,
-      #16a1d5 82%,
-      #0878b1 100%
-    );
-
-  box-shadow:
-    inset 0 7px 15px #d4f7ff70,
-    inset 0 -12px 22px #00618c42;
-
-  transition: height 1.4s ease;
 }
 
-/* Légère lumière sous la surface */
-
-.water:before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    repeating-linear-gradient(
-      165deg,
-      transparent 0px,
-      transparent 25px,
-      #e3faff12 27px,
-      transparent 31px
-    );
-  pointer-events: none;
+.poisson-nageoire{
+ position:absolute;
+ z-index:2;
+ top:0;
+ left:27px;
+ width:17px;
+ height:12px;
+ background:#ffbd58;
+ border-radius:100% 0 60% 0;
+ transform:rotate(-15deg)
 }
 
-/* Ondulations de surface */
-
-.wave {
-  position: absolute;
-  top: -9px;
-  left: -50%;
-  width: 200%;
-  height: 19px;
-  border-radius: 44%;
-  background: linear-gradient(
-    180deg,
-    #f0fdff 0%,
-    #a5f0ff 28%,
-    #51d5f7 68%,
-    #24a9dc 100%
-  );
-  box-shadow: 0 2px 5px #e4fbff55;
-  animation: vague 5s linear infinite;
+@keyframes nagePoisson{
+ 0%{
+  left:12%;
+  top:44%;
+  transform:scaleX(1) translateY(0)
+ }
+ 45%{
+  top:50%;
+  transform:scaleX(1) translateY(-5px)
+ }
+ 50%{
+  transform:scaleX(-1) translateY(-5px)
+ }
+ 100%{
+  left:72%;
+  top:38%;
+  transform:scaleX(-1) translateY(0)
+ }
 }
 
-.wave.two {
-  top: -4px;
-  opacity: .42;
-  transform: translateX(18%);
-  animation-duration: 7s;
-  animation-direction: reverse;
+@keyframes remueQueue{
+ from{transform:rotate(-15deg)}
+ to{transform:rotate(15deg)}
 }
 
-@keyframes vague {
-  from { transform: translateX(0) rotate(0deg); }
-  to   { transform: translateX(25%) rotate(3deg); }
+.frame{
+ position:absolute;
+ z-index:5;
+ inset:0;
+ pointer-events:none;
+ background:repeating-linear-gradient(to bottom,
+ transparent 0,transparent 24%,#e2edf533 25%,transparent 26%);
+ border-left:5px solid #dce7ef99;
+ border-right:5px solid #dce7ef99
 }
 
-/* ===== POISSON ORANGE ===== */
-
-.poisson {
-  position: absolute;
-  z-index: 4;
-  left: 12%;
-  top: 55%;
-  width: 66px;
-  height: 38px;
-  pointer-events: none;
-  filter: drop-shadow(0 3px 4px #00415a55);
-  animation: nagePoisson 12s ease-in-out infinite alternate;
-  will-change: left, transform;
+.scale{
+ position:absolute;
+ z-index:6;
+ left:12px;
+ top:28px;
+ bottom:20px;
+ display:flex;
+ flex-direction:column;
+ justify-content:space-between;
+ color:white;
+ font-size:12px;
+ text-shadow:0 1px 3px #001
 }
 
-.poisson-corps {
-  position: absolute;
-  inset: 5px 12px 5px 4px;
-  border-radius: 55% 48% 48% 55%;
-  background: linear-gradient(
-    180deg,
-    #ffe2a0 0%,
-    #ffb342 28%,
-    #ff8b25 62%,
-    #db5416 100%
-  );
-  box-shadow:
-    inset 0 3px 4px #fff9,
-    inset 0 -3px 3px #a83d1540;
+.scale span:before{
+ content:"";
+ display:inline-block;
+ width:13px;
+ border-top:2px solid white;
+ margin-right:5px;
+ vertical-align:middle
 }
 
-.poisson-queue {
-  position: absolute;
-  right: 0;
-  top: 8px;
-  width: 0;
-  height: 0;
-  border-top: 11px solid transparent;
-  border-bottom: 11px solid transparent;
-  border-right: 17px solid #ff922e;
-  filter: drop-shadow(0 1px 1px #8a390c);
-  transform-origin: right center;
-  animation: remueQueue .35s ease-in-out infinite alternate;
+.base{
+ height:24px;
+ max-width:500px;
+ margin:auto;
+ background:linear-gradient(#687b8d,#1b2938);
+ border-radius:3px 3px 10px 10px;
+ box-shadow:0 10px 18px #0008
 }
 
-.poisson-oeil {
-  position: absolute;
-  z-index: 3;
-  top: 11px;
-  left: 12px;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #182538;
-  border: 1px solid white;
-  box-shadow: 0 0 2px #fff;
+.cards{display:grid;gap:14px}
+
+.card{
+ padding:23px;
+ border:1px solid #273950;
+ border-radius:14px;
+ background:linear-gradient(135deg,#152338,#101a2a)
 }
 
-.poisson-nageoire {
-  position: absolute;
-  z-index: 2;
-  top: 0;
-  left: 27px;
-  width: 17px;
-  height: 12px;
-  background: #ffc56d;
-  border-radius: 100% 0 60% 0;
-  transform: rotate(-15deg);
+.label{color:#aebfd5;font-size:15px}
+
+.value{
+ font-size:clamp(28px,4vw,42px);
+ font-weight:bold;
+ margin-top:10px;
+ letter-spacing:.3px
 }
 
-@keyframes nagePoisson {
-  0% {
-    left: 12%;
-    transform: scaleX(1) translateY(0);
-  }
-  45% {
-    left: 44%;
-    transform: scaleX(1) translateY(-5px);
-  }
-  50% {
-    left: 48%;
-    transform: scaleX(-1) translateY(-5px);
-  }
-  100% {
-    left: 72%;
-    transform: scaleX(-1) translateY(0);
-  }
+.bar{
+ height:9px;
+ background:#29384c;
+ border-radius:20px;
+ margin-top:18px;
+ overflow:hidden
 }
 
-@keyframes remueQueue {
-  from { transform: rotate(-15deg); }
-  to   { transform: rotate(15deg); }
+.bar div{
+ height:100%;
+ width:0;
+ background:#26a8f4;
+ border-radius:20px;
+ transition:width 1.4s
 }
 
-/* Repères visuels sur la paroi */
-
-.frame {
-  position: absolute;
-  z-index: 6;
-  inset: 0;
-  pointer-events: none;
-  background: repeating-linear-gradient(
-    to bottom,
-    transparent 0,
-    transparent 24%,
-    #f0f8fc22 25%,
-    transparent 26%
-  );
-  border-left: 4px solid #eef5f548;
-  border-right: 4px solid #28394355;
+footer{
+ text-align:center;
+ color:#8095ad;
+ font-size:12px;
+ margin-top:20px
 }
 
-/* Échelle de niveau */
-
-.scale {
-  position: absolute;
-  z-index: 7;
-  left: 11px;
-  top: 31px;
-  bottom: 19px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  color: #fff;
-  font-size: 12px;
-  font-weight: bold;
-  text-shadow: 0 1px 4px #001a2b;
+@media(max-width:680px){
+ body{padding:15px}
+ .layout{grid-template-columns:1fr;gap:10px}
+ .tank{height:350px}
+ .tank-wrap{padding:5px}
+ .card{padding:17px}
+ .value{font-size:32px}
 }
 
-.scale span:before {
-  content: "";
-  display: inline-block;
-  width: 13px;
-  border-top: 2px solid #f4fcff;
-  margin-right: 5px;
-  vertical-align: middle;
-}
-
-/* Pied robuste de la cuve */
-
-.base {
-  height: 25px;
-  max-width: 500px;
-  margin: auto;
-  background: linear-gradient(
-    180deg,
-    #8b979d 0%,
-    #58666e 28%,
-    #303d46 75%,
-    #1b2831 100%
-  );
-  border: 1px solid #a1adb3;
-  border-top: 3px solid #c2cbd0;
-  border-radius: 3px 3px 10px 10px;
-  box-shadow:
-    inset 0 2px 3px #fff4,
-    0 10px 18px #0008;
-}
-
-/* ===== CARTES DE DONNÉES ===== */
-
-.cards {
-  display: grid;
-  gap: 14px;
-}
-
-.card {
-  padding: 23px;
-  border: 1px solid #31485b;
-  border-radius: 15px;
-  background: linear-gradient(145deg, #1d3143, #111e2c);
-  box-shadow:
-    inset 0 1px 0 #ffffff0b,
-    0 8px 20px #0002;
-}
-
-.label {
-  color: var(--secondaire);
-  font-size: 15px;
-}
-
-.value {
-  font-size: clamp(28px, 4vw, 42px);
-  font-weight: bold;
-  margin-top: 10px;
-  letter-spacing: .3px;
-  font-variant-numeric: tabular-nums;
-}
-
-.bar {
-  height: 10px;
-  background: #2a3c4e;
-  border: 1px solid #3b5265;
-  border-radius: 20px;
-  margin-top: 18px;
-  overflow: hidden;
-}
-
-.bar div {
-  height: 100%;
-  width: 0;
-  background: linear-gradient(90deg, #168fce, #56dcff);
-  border-radius: 20px;
-  box-shadow: 0 0 10px #32c8ff65;
-  transition: width 1.4s ease;
-}
-
-footer {
-  text-align: center;
-  color: #8fa6b9;
-  font-size: 12px;
-  margin-top: 20px;
-}
-
-/* ===== AFFICHAGE MOBILE ===== */
-
-@media(max-width:680px) {
-  body {
-    padding: 15px;
-  }
-
-  .layout {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-
-  .tank {
-    height: 350px;
-  }
-
-  .tank-wrap {
-    padding: 5px;
-  }
-
-  .card {
-    padding: 17px;
-  }
-
-  .value {
-    font-size: 32px;
-  }
-}
-
-@media(prefers-reduced-motion:reduce) {
-  .poisson,
-  .poisson-queue,
-  .wave {
-    animation: none;
-  }
-
-  .water,
-  .bar div {
-    transition: none;
-  }
+@media(prefers-reduced-motion:reduce){
+ .poisson,.poisson-queue,.wave{animation:none}
 }
 </style>
 </head>
@@ -492,63 +299,63 @@ footer {
 <main>
 
 <header>
-  <div>
-    <h1>💧 Reservoir H2O</h1>
-    <div class="sub">Niveau d’eau en temps réel</div>
-  </div>
-  <div class="status">● Surveillance du bassin</div>
+ <div>
+  <h1>💧 Reservoir H2O</h1>
+  <div class="sub">Niveau d’eau en temps réel</div>
+ </div>
+ <div class="status">● Affichage du bassin</div>
 </header>
 
 <section class="layout">
 
-  <div class="tank-wrap">
-    <div class="tank" id="tank">
+ <div class="tank-wrap">
+  <div class="tank">
 
-      <div class="water" id="water">
-        <div class="wave"></div>
-        <div class="wave two"></div>
-      </div>
+   <div class="water" id="water">
+    <div class="wave"></div>
+    <div class="wave two"></div>
+   </div>
 
-      <div class="poisson" aria-hidden="true">
-        <div class="poisson-nageoire"></div>
-        <div class="poisson-corps"></div>
-        <div class="poisson-queue"></div>
-        <div class="poisson-oeil"></div>
-      </div>
+   <div class="poisson" aria-hidden="true">
+    <div class="poisson-nageoire"></div>
+    <div class="poisson-corps"></div>
+    <div class="poisson-queue"></div>
+    <div class="poisson-oeil"></div>
+   </div>
 
-      <div class="frame"></div>
+   <div class="frame"></div>
 
-      <div class="scale">
-        <span>100 %</span>
-        <span>75 %</span>
-        <span>50 %</span>
-        <span>25 %</span>
-        <span>0 %</span>
-      </div>
-
-    </div>
-    <div class="base"></div>
-  </div>
-
-  <div class="cards">
-
-    <div class="card">
-      <div class="label">💧 Volume actuel estimé</div>
-      <div class="value" id="litres">-- L</div>
-      <div class="bar"><div id="bar"></div></div>
-    </div>
-
-    <div class="card">
-      <div class="label">◉ Niveau de remplissage</div>
-      <div class="value" id="pct">-- %</div>
-    </div>
-
-    <div class="card">
-      <div class="label">▣ Capacité maximale</div>
-      <div class="value">2 257 L</div>
-    </div>
+   <div class="scale">
+    <span>100 %</span>
+    <span>75 %</span>
+    <span>50 %</span>
+    <span>25 %</span>
+    <span>0 %</span>
+   </div>
 
   </div>
+  <div class="base"></div>
+ </div>
+
+ <div class="cards">
+
+  <div class="card">
+   <div class="label">💧 Volume actuel estimé</div>
+   <div class="value" id="litres">-- L</div>
+   <div class="bar"><div id="bar"></div></div>
+  </div>
+
+  <div class="card">
+   <div class="label">◉ Niveau de remplissage</div>
+   <div class="value" id="pct">-- %</div>
+  </div>
+
+  <div class="card">
+   <div class="label">▣ Capacité maximale</div>
+   <div class="value">2 257 L</div>
+  </div>
+
+ </div>
 </section>
 
 <footer id="updated">Connexion à Datacake...</footer>
@@ -560,110 +367,63 @@ const CAPACITE = 2257;
 const API_URL = "https://bassin-datacake-api.pegrenier.workers.dev/";
 
 const poisson = document.querySelector(".poisson");
-const tank = document.getElementById("tank");
 
-let dernierPourcentage = 44.5;
-
-/*
- * Place le poisson juste sous la surface.
- * La position est calculée en pixels pour que l'animation
- * horizontale ne puisse pas le faire sortir de l'eau.
- */
 function positionnerPoisson(pourcentage) {
-  dernierPourcentage = pourcentage;
-
-  const hauteurCuve = tank.clientHeight;
-  const hauteurPoisson = poisson.offsetHeight;
-  const surface = hauteurCuve * (1 - pourcentage / 100);
-  const marge = 12;
-
-  // À très bas niveau, le poisson est masqué plutôt
-  // que d'apparaître à l'extérieur de l'eau.
-  if (pourcentage < 5) {
-    poisson.style.visibility = "hidden";
-    return;
-  }
-
-  const positionMax = hauteurCuve - hauteurPoisson - marge;
-  const position = Math.min(
-    positionMax,
-    Math.max(surface + marge, marge)
-  );
-
-  poisson.style.top = position + "px";
-  poisson.style.visibility = "visible";
+  // Le poisson reste sous la surface, avec une marge de sécurité.
+  const haut = Math.max(12, 100 - pourcentage + 12);
+  poisson.style.top = Math.min(88, haut) + "%";
 }
 
-function afficherNiveau(valeur) {
-  const litres = Number(valeur);
+function afficherNiveau(valeur){
+ const litres = Math.max(0, Math.min(CAPACITE, Number(valeur)));
 
-  if (!Number.isFinite(litres)) return;
+ if(!Number.isFinite(litres)) return;
 
-  const volume = Math.max(0, Math.min(CAPACITE, litres));
-  const p = volume / CAPACITE * 100;
+ const p = litres / CAPACITE * 100;
+positionnerPoisson(p);
+ document.getElementById("water").style.height = p + "%";
 
-  document.getElementById("water").style.height = p + "%";
+ document.getElementById("litres").textContent =
+  Math.round(litres).toLocaleString("fr-CA") + " L";
 
-  positionnerPoisson(p);
+ document.getElementById("pct").textContent =
+  p.toLocaleString("fr-CA",{maximumFractionDigits:1}) + " %";
 
-  document.getElementById("litres").textContent =
-    Math.round(volume).toLocaleString("fr-CA") + " L";
+ document.getElementById("bar").style.width = p + "%";
 
-  document.getElementById("pct").textContent =
-    p.toLocaleString("fr-CA", {
-      maximumFractionDigits: 1
-    }) + " %";
+ document.getElementById("updated").textContent =
+  "Dernière mise à jour : " +
+  new Date().toLocaleTimeString("fr-CA");
+}
 
-  document.getElementById("bar").style.width = p + "%";
+async function actualiserNiveau(){
+ try{
+  const reponse = await fetch(API_URL,{cache:"no-store"});
 
+  if(!reponse.ok){
+   throw new Error("Erreur HTTP " + reponse.status);
+  }
+
+  const donnees = await reponse.json();
+  const litresCapteur = Number(donnees.litres);
+
+  if(!Number.isFinite(litresCapteur)){
+   throw new Error("Valeur de litres invalide");
+  }
+
+  const litresTotal = litresCapteur * 2.257;
+  afficherNiveau(litresTotal);
+
+ }catch(erreur){
+  console.error("Erreur de lecture du bassin :",erreur);
   document.getElementById("updated").textContent =
-    "Dernière mise à jour : " +
-    new Date().toLocaleTimeString("fr-CA");
+   "Connexion temporairement indisponible";
+ }
 }
 
-async function actualiserNiveau() {
-  try {
-    const reponse = await fetch(API_URL, {
-      cache: "no-store"
-    });
-
-    if (!reponse.ok) {
-      throw new Error("Erreur HTTP " + reponse.status);
-    }
-
-    const donnees = await reponse.json();
-    const litresCapteur = Number(donnees.litres);
-
-    if (!Number.isFinite(litresCapteur)) {
-      throw new Error("Valeur de litres invalide");
-    }
-
-    // Un capteur sur un bassin de 1 000 L :
-    // estimation des 3 bassins interconnectés.
-    const litresTotal = litresCapteur * 2.257;
-
-    afficherNiveau(litresTotal);
-
-  } catch (erreur) {
-    console.error("Erreur de lecture du bassin :", erreur);
-
-    document.getElementById("updated").textContent =
-      "Connexion temporairement indisponible";
-  }
-}
-
-// Ajuste la position du poisson si la fenêtre change de taille.
-window.addEventListener("resize", () => {
-  positionnerPoisson(dernierPourcentage);
-});
-
-// Première lecture au chargement.
 actualiserNiveau();
-
-// Actualisation toutes les 5 minutes.
-setInterval(actualiserNiveau, 5 * 60 * 1000);
+setInterval(actualiserNiveau,5*60*1000);
 </script>
 
 </body>
 </html>
-```
