@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Niveau du bassin</title>
+<style>
+body {
+  margin: 0;
+  padding: 24px;
+  background: #101827;
+  color: white;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+h2 { margin-bottom: 8px; }
+#litres { font-size: 32px; font-weight: bold; }
+#pourcentage { color: #8ebeff; margin: 8px; }
+.bassin {
+  position: relative;
+  width: min(260px, 75vw);
+  height: 300px;
+  margin: 25px auto;
+  border: 5px solid #a9bacb;
+  border-radius: 8px;
+  background: #263548;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+.eau {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 44.5%;
+  background: linear-gradient(#39bdf8, #0875d1);
+  transition: height 1.5s ease;
+}
+.eau::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: 0;
+  width: 200%;
+  height: 10px;
+  background: #70d5ff;
+  border-radius: 50%;
+}
+.graduations {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-start;
+  pointer-events: none;
+}
+.graduations span {
+  width: 18px;
+  border-top: 2px solid white;
+  opacity: .8;
+}
+.note { color: #aebed0; font-size: 13px; }
+</style>
+</head>
+<body>
+<h2>Mon bassin</h2>
+<div id="litres">1 000 L</div>
+<div id="pourcentage">44,5 % plein</div>
+
+<div class="bassin">
+  <div class="eau" id="eau"></div>
+  <div class="graduations">
+    <span></span><span></span><span></span>
+    <span></span><span></span><span></span>
+  </div>
+</div>
+
+<div class="note">Capacité maximale : 2 246 litres</div>
+<div class="note" id="etat">Mode démonstration</div>
+
+<script>
+const CAPACITE = 2246;
+
+function afficherNiveau(litres) {
+  litres = Math.max(0, Math.min(CAPACITE, litres));
+  const pourcentage = litres / CAPACITE * 100;
+
+  document.getElementById("eau").style.height =
+    pourcentage + "%";
+
+  document.getElementById("litres").textContent =
+    Math.round(litres).toLocaleString("fr-CA") + " L";
+
+  document.getElementById("pourcentage").textContent =
+    pourcentage.toFixed(1).replace(".", ",") + " % plein";
+}
+
+// Démonstration temporaire
+afficherNiveau(1000);
+</script>
+</body>
+</html>
