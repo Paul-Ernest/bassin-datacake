@@ -114,6 +114,38 @@ footer{text-align:center;color:#8095ad;font-size:12px;margin-top:20px}
   }
 }
 
+.poisson {
+  position: absolute;
+  z-index: 10;
+  top: 42%;
+  left: 15%;
+  font-size: 42px;
+  line-height: 1;
+  filter: drop-shadow(0 3px 5px #001b33);
+  pointer-events: none;
+  animation: nagePoisson 10s ease-in-out infinite alternate;
+}
+
+@keyframes nagePoisson {
+  0% {
+    left: 14%;
+    top: 42%;
+    transform: scaleX(1) rotate(-5deg);
+  }
+  45% {
+    top: 48%;
+    transform: scaleX(1) rotate(5deg);
+  }
+  50% {
+    transform: scaleX(-1) rotate(5deg);
+  }
+  100% {
+    left: 72%;
+    top: 38%;
+    transform: scaleX(-1) rotate(-5deg);
+  }
+}
+
 </style>
 </head>
 <body>
@@ -129,9 +161,9 @@ footer{text-align:center;color:#8095ad;font-size:12px;margin-top:20px}
 <section class="layout">
  <div class="tank-wrap">
   <div class="tank">
-   <div class="poisson" style="position:absolute; z-index:10; top:45%; left:40%; font-size:40px;">
-  🐠
-</div>
+   
+<div class="poisson">🐠</div>
+
    <div class="water" id="water">
     <div class="wave"></div>
     <div class="wave two"></div>
