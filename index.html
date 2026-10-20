@@ -366,13 +366,21 @@ footer{
 const CAPACITE = 2257;
 const API_URL = "https://bassin-datacake-api.pegrenier.workers.dev/";
 
+const poisson = document.querySelector(".poisson");
+
+function positionnerPoisson(pourcentage) {
+  // Le poisson reste sous la surface, avec une marge de sécurité.
+  const haut = Math.max(12, 100 - pourcentage + 12);
+  poisson.style.top = Math.min(88, haut) + "%";
+}
+
 function afficherNiveau(valeur){
  const litres = Math.max(0, Math.min(CAPACITE, Number(valeur)));
 
  if(!Number.isFinite(litres)) return;
 
  const p = litres / CAPACITE * 100;
-
+positionnerPoisson(p);
  document.getElementById("water").style.height = p + "%";
 
  document.getElementById("litres").textContent =
