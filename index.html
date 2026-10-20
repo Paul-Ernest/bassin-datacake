@@ -160,7 +160,8 @@ async function actualiserNiveau() {
     }
 
     const donnees = await reponse.json();
-    afficherNiveau(Number(donnees.litres));
+    const litresTotal = Number(donnees.litres) * 2.257;
+afficherNiveau(litresTotal);
   } catch (erreur) {
     console.error("Erreur de lecture du bassin :", erreur);
     document.getElementById("updated").textContent =
